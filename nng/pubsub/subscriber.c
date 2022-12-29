@@ -14,10 +14,12 @@ int main() {
   // Connect the subscriber to the publisher
   nng_dial(subscriber, "tcp://localhost:5000", NULL, 0);
 
-  // Receive the message on the subscriber
-  nng_recvmsg(subscriber, &msg, 0);
-  data = nng_msg_body(msg);
-  printf("Received message: %s\n", data);
+  while (1) {
+    // Receive a message on the subscriber
+    nng_recvmsg(subscriber, &msg, 0);
+    data = nng_msg_body(msg);
+    printf("Received message: %s\n", data);
+  }
 
   // Clean up
   nng_close(subscriber);
