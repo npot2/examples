@@ -7,6 +7,7 @@ int main() {
   nng_socket publisher;
   nng_msg *msg;
   char *data;
+  int i;
 
   // Initialize the publisher socket
   nng_pub0_open(&publisher);
@@ -14,11 +15,15 @@ int main() {
   // Bind the publisher to a local address
   nng_listen(publisher, "tcp://localhost:5000", NULL, 0);
 
-  // Send a message from the publisher
-  nng_msg_alloc(&msg, 0);
-  data = nng_msg_body(msg);
-  strcpy(data, "Hello, World!");
-  nng_sendmsg(publisher, msg, 0);
+  while (1) {
+    // Send a message from the publisher
+    nng_msg_alloc(&msg, 0);
+    data = nng_msg_body(msg);
+    sprintf(data, "Message %d", i);
+    nng_sendmsg(publisher, msg, 0);
+    printf("Sent message: %s\n", data);
+    i++;
+  }
 
   // Clean up
   nng_close(publisher);
